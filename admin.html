@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin CMS Dashboard | SHREE GLOBAL</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    /* Admin custom dashboard adjustments */
+    body {
+      background: #071016;
+      color: #ffffff;
+      min-height: 100vh;
+    }
+    
+    .admin-wrapper {
+      padding: 60px 0;
+    }
+    
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 24px;
+      margin-bottom: 40px;
+    }
+    
+    .admin-header h1 {
+      font-size: 32px;
+      letter-spacing: -1px;
+    }
+    
+    .admin-header h1 span {
+      color: var(--red);
+    }
+    
+    /* Login Lock Screen */
+    .login-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 16, 22, 0.96);
+      backdrop-filter: blur(20px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .login-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-xl);
+      padding: 40px;
+      width: min(440px, 90%);
+      text-align: center;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+    }
+    
+    .login-card h2 {
+      margin-bottom: 20px;
+      font-size: 26px;
+    }
+    
+    .login-card input {
+      width: 100%;
+      min-height: 48px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      padding: 12px 20px;
+      color: white;
+      text-align: center;
+      font-size: 16px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+    
+    .login-card input:focus {
+      outline: none;
+      border-color: var(--red);
+      background: rgba(255, 255, 255, 0.12);
+    }
+    
+    /* Tabs Control */
+    .admin-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 16px;
+    }
+    
+    .tab-btn {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 10px 24px;
+      border-radius: 999px;
+      color: white;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    
+    .tab-btn:hover {
+      background: rgba(255,255,255,0.12);
+    }
+    
+    .tab-btn.active {
+      background: var(--red);
+      border-color: var(--red);
+      box-shadow: 0 10px 24px rgba(239, 52, 47, 0.2);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    /* Grid sections */
+    .cms-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+    
+    @media (max-width: 980px) {
+      .cms-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .form-panel {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-lg);
+      padding: 30px;
+    }
+    
+    .form-panel h3 {
+      font-size: 20px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 12px;
+    }
+    
+    .admin-field {
+      margin-bottom: 18px;
+    }
+    
+    .admin-field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 8px;
+      color: var(--muted);
+    }
+    
+    .admin-field input,
+    .admin-field textarea,
+    .admin-field select {
+      width: 100%;
+      min-height: 44px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 10px 16px;
+      color: white;
+      transition: all 0.3s ease;
+    }
+    
+    .admin-field textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .admin-field input:focus,
+    .admin-field textarea:focus {
+      outline: none;
+      border-color: var(--red);
+      background: rgba(255, 255, 255, 0.08);
+    }
+    
+    /* Lists items */
+    .items-list {
+      max-height: 700px;
+      overflow-y: auto;
+      display: grid;
+      gap: 16px;
+    }
+    
+    .list-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 16px;
+    }
+    
+    .list-item img {
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: white;
+    }
+    
+    .list-item-info {
+      flex: 1;
+    }
+    
+    .list-item-info h4 {
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+    
+    .list-item-info p {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    
+    .del-btn {
+      background: rgba(239, 52, 47, 0.1);
+      border: 1px solid rgba(239, 52, 47, 0.2);
+      color: #ff5555;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .del-btn:hover {
+      background: var(--red);
+      color: white;
+      border-color: var(--red);
+    }
+    
+    /* Specs Helper Grid */
+    .specs-helper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    
+    /* Toast Banner */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 3000;
+    }
+    
+    .toast {
+      background: rgba(12, 24, 32, 0.95);
+      border-left: 4px solid var(--red);
+      color: white;
+      padding: 16px 24px;
+      border-radius: 8px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      margin-top: 10px;
+      animation: modalScaleIn 0.3s ease;
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login Lock Overlay -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-card">
+      <div class="eyebrow" style="margin-bottom:12px;">Admin Access</div>
+      <h2>Enter Admin Passcode</h2>
+      <input type="password" id="passcodeField" placeholder="••••••••">
+      <button class="btn btn-primary" style="width:100%;" onclick="attemptLogin()">Unlock CMS</button>
+    </div>
+  </div>
+
+  <div class="container admin-wrapper">
+    <header class="admin-header">
+      <a href="index.html" class="brand">
+        <img class="brand-logo" src="assets/images/logo.png" alt="SHREE GLOBAL logo">
+        <span class="brand-text">
+          <strong>SHREE GLOBAL</strong>
+          <span>Admin Panel</span>
+        </span>
+      </a>
+      
+      <div>
+        <a href="products.html" class="btn btn-outline" style="min-height:40px;padding:8px 16px;font-size:13px;">View Catalog</a>
+        <button class="btn btn-primary" style="min-height:40px;padding:8px 16px;font-size:13px;" onclick="logout()">Logout</button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="admin-tabs">
+      <button class="tab-btn active" onclick="switchTab('products-tab')">Manage Products</button>
+      <button class="tab-btn" onclick="switchTab('partners-tab')">Manage Partners</button>
+    </nav>
+
+    <!-- PRODUCTS TAB CONTENT -->
+    <section id="products-tab" class="tab-content active">
+      <div class="cms-grid">
+        
+        <!-- Add Product Form -->
+        <div class="form-panel">
+          <h3 id="productFormTitle">Add New Product</h3>
+          <form id="productForm" onsubmit="event.preventDefault(); saveProduct();">
+            <div class="admin-field">
+              <label>Product Title</label>
+              <input type="text" id="pTitle" required placeholder="e.g. Jute Shopping Bags Premium">
+            </div>
+            
+            <div class="admin-field">
+              <label>Category Tag</label>
+              <select id="pCategory" required>
+                <option value="retail-essential">Retail Essential</option>
+                <option value="marketing">Marketing & Events</option>
+                <option value="packaging">Premium Packaging</option>
+                <option value="gifting">Gifting & Beverage</option>
+                <option value="utility">Utility Line</option>
+                <option value="custom">Custom Sourcing</option>
+              </select>
+            </div>
+            
+            <div class="admin-field">
+              <label>Description</label>
+              <textarea id="pDescription" required placeholder="Describe the product use cases, build quality, and target audience..."></textarea>
+            </div>
+            
+            <div class="admin-field">
+              <label>Image URLs (comma separated)</label>
+              <input type="text" id="pImages" required placeholder="e.g. assets/images/category-jute-bags.png">
+            </div>
+
+            <div class="admin-field">
+              <label>Specifications (JSON format or key-values)</label>
+              <textarea id="pSpecs" placeholder='e.g. {"Material": "Premium Jute", "GSM": "280 GSM", "Handle": "Padded Cotton"}'></textarea>
+            </div>
+
+            <div class="admin-field">
+              <label>Sizes (JSON format)</label>
+              <textarea id="pSizes" placeholder='e.g. {"Standard": "35 × 40 cm", "Large": "40 × 45 cm"}'></textarea>
+            </div>
+            
+            <div class="admin-field">
+              <label>Minimum Order Quantity (MOQ)</label>
+              <input type="text" id="pMoq" required placeholder="e.g. 1000 Pcs">
+            </div>
+            
+            <button class="btn btn-primary" type="submit" style="width:100%;">Upload Product</button>
+          </form>
+        </div>
+
+        <!-- Products List -->
+        <div class="form-panel">
+          <h3>Current Products list</h3>
+          <div class="items-list" id="productsList">
+            <p style="color:var(--muted);">Loading products from Google Sheet...</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PARTNERS TAB CONTENT -->
+    <section id="partners-tab" class="tab-content">
+      <div class="cms-grid">
+        
+        <!-- Add Partner Form -->
+        <div class="form-panel">
+          <h3 id="partnerFormTitle">Add Partner Company</h3>
+          <form id="partnerForm" onsubmit="event.preventDefault(); savePartner();">
+            <div class="admin-field">
+              <label>Company Name</label>
+              <input type="text" id="partName" required placeholder="e.g. Eco Corp">
+            </div>
+            
+            <div class="admin-field">
+              <label>Logo Image URL</label>
+              <input type="text" id="partLogo" required placeholder="e.g. assets/images/logo-eco.png">
+            </div>
+            
+            <button class="btn btn-primary" type="submit" style="width:100%;">Upload Partner</button>
+          </form>
+        </div>
+
+        <!-- Partners List -->
+        <div class="form-panel">
+          <h3>Current Partners</h3>
+          <div class="items-list" id="partnersList">
+            <p style="color:var(--muted);">Loading partners...</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    // Injected by build step, matches GOOGLE_SCRIPT_URL in main.js
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4j5UYm8uxRTqhgLTYYog7tzgskOsAX-6ivFbaE_eY1x97fEoZZRP04gH4AeCBEKwB/exec";
+    
+    let dbData = { products: [], partners: [] };
+    let editingProductId = null;
+    let editingPartnerId = null;
+    
+    // Auth helpers
+    function attemptLogin() {
+      const passcode = document.getElementById("passcodeField").value.trim();
+      if (passcode === "shree_global_admin_123") {
+        sessionStorage.setItem("shree_admin_pass", passcode);
+        document.getElementById("loginOverlay").style.display = "none";
+        showToast("Access Granted");
+        loadCMSData();
+      } else {
+        alert("Invalid admin passcode!");
+      }
+    }
+    
+    function logout() {
+      sessionStorage.removeItem("shree_admin_pass");
+      window.location.reload();
+    }
+    
+    // Auto-login on load if session valid
+    window.addEventListener("DOMContentLoaded", () => {
+      const savedPass = sessionStorage.getItem("shree_admin_pass");
+      if (savedPass === "shree_global_admin_123") {
+        document.getElementById("loginOverlay").style.display = "none";
+        loadCMSData();
+      }
+    });
+
+    // Tab Switching
+    function switchTab(tabId) {
+      document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+      document.querySelectorAll(".tab-content").forEach(content => content.classList.remove("active"));
+      
+      event.target.classList.add("active");
+      document.getElementById(tabId).classList.add("active");
+    }
+
+    let isLocalStorageMode = false;
+
+    // Load dynamic data
+    async function loadCMSData() {
+      try {
+        const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getData`);
+        if (!response.ok) throw new Error("HTTP Status " + response.status);
+        const result = await response.json();
+        
+        if (result.status === "success") {
+          dbData = result;
+          // Clean local storage indicator
+          const indicator = document.getElementById("storageIndicator");
+          if (indicator) indicator.remove();
+          renderProducts();
+          renderPartners();
+          return;
+        }
+      } catch (err) {
+        console.warn("Google Sheet API offline, switching to LocalStorage mode.", err);
+      }
+      enableLocalStorageMode();
+    }
+
+    function enableLocalStorageMode() {
+      isLocalStorageMode = true;
+      
+      // Add a visual indicator
+      if (!document.getElementById("storageIndicator")) {
+        const indicator = document.createElement("div");
+        indicator.id = "storageIndicator";
+        indicator.style.background = "rgba(242, 156, 17, 0.15)";
+        indicator.style.border = "1px solid #f29c11";
+        indicator.style.color = "#f29c11";
+        indicator.style.padding = "12px 20px";
+        indicator.style.borderRadius = "12px";
+        indicator.style.marginBottom = "20px";
+        indicator.style.fontWeight = "bold";
+        indicator.style.fontSize = "14px";
+        indicator.innerHTML = "⚠️ Sheets backend is not updated to Version 7. Switched to Local Browser Storage (Mock Mode) so you can test Adding, Editing, and Deleting immediately!";
+        document.querySelector(".admin-wrapper").insertBefore(indicator, document.querySelector(".admin-tabs"));
+      }
+      
+      // Load from localStorage or set defaults
+      if (!localStorage.getItem("shree_products")) {
+        const defaultProds = [
+          {
+            id: "prod_1",
+            title: "Premium Organic Cotton Shopper",
+            category: "retail-essential",
+            description: "Heavyweight organic cotton canvas tote bag with thick woven handles, suitable for high-end retail, grocery boutiques, and organic branding campaigns.",
+            images: ["assets/images/category-promotional-totes.png"],
+            specs: { "Material": "Organic Cotton Canvas", "GSM": "320 GSM", "Handle": "Thick Cotton Webbing" },
+            sizes: { "Standard": "38 × 42 cm" },
+            moq: "500 Pcs"
+          },
+          {
+            id: "prod_2",
+            title: "Premium Kraft Paper Bags",
+            category: "packaging",
+            description: "Heavy-duty brown kraft paper carrier bags with reinforced flat paper handles, ideal for eco-friendly luxury packaging, boutique retail, and food takeaway.",
+            images: ["https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80"],
+            specs: { "Material": "Recycled Kraft Paper", "GSM": "150 GSM" },
+            sizes: { "Medium": "32 × 12 × 41 cm" },
+            moq: "2000 Pcs"
+          }
+        ];
+        localStorage.setItem("shree_products", JSON.stringify(defaultProds));
+      }
+      
+      if (!localStorage.getItem("shree_partners")) {
+        const defaultParts = [
+          { id: "part_1", name: "Green Retailers Group", logoUrl: "assets/images/logo.png" },
+          { id: "part_2", name: "Eco-Friendly Products Canada", logoUrl: "assets/images/logo.png" }
+        ];
+        localStorage.setItem("shree_partners", JSON.stringify(defaultParts));
+      }
+      
+      dbData.products = JSON.parse(localStorage.getItem("shree_products"));
+      dbData.partners = JSON.parse(localStorage.getItem("shree_partners"));
+      
+      renderProducts();
+      renderPartners();
+    }
+
+    function renderProducts() {
+      const listEl = document.getElementById("productsList");
+      if (dbData.products.length === 0) {
+        listEl.innerHTML = '<p style="color:var(--muted);">No custom products inside Google Sheet yet. Using local hardcoded portfolio fallbacks.</p>';
+        return;
+      }
+      
+      listEl.innerHTML = dbData.products.map(prod => {
+        const img = prod.images && prod.images.length > 0 ? prod.images[0] : "assets/images/category-jute-bags.png";
+        return `
+          <div class="list-item">
+            <img src="${img}" alt="${prod.title}" onerror="this.src='assets/images/category-jute-bags.png'">
+            <div class="list-item-info">
+              <h4>${prod.title}</h4>
+              <p>Category: ${prod.category} | MOQ: ${prod.moq}</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-outline" style="min-height:36px; padding:6px 12px; font-size:12px;" onclick="startEditProduct('${prod.id}')">Edit</button>
+              <button class="del-btn" style="min-height:36px; padding:6px 12px; font-size:12px;" onclick="deleteItem('deleteProduct', '${prod.id}')">Delete</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderPartners() {
+      const listEl = document.getElementById("partnersList");
+      if (dbData.partners.length === 0) {
+        listEl.innerHTML = '<p style="color:var(--muted);">No partners inside Google Sheet yet. Using default landing page logos.</p>';
+        return;
+      }
+      
+      listEl.innerHTML = dbData.partners.map(part => {
+        return `
+          <div class="list-item">
+            <img src="${part.logoUrl}" alt="${part.name}" onerror="this.src='assets/images/logo.png'">
+            <div class="list-item-info">
+              <h4>${part.name}</h4>
+              <p>Logo URL: ${part.logoUrl}</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-outline" style="min-height:36px; padding:6px 12px; font-size:12px;" onclick="startEditPartner('${part.id}')">Edit</button>
+              <button class="del-btn" style="min-height:36px; padding:6px 12px; font-size:12px;" onclick="deleteItem('deletePartner', '${part.id}')">Delete</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // Edit Product Setup
+    function startEditProduct(id) {
+      const prod = dbData.products.find(p => p.id === id);
+      if (!prod) return;
+      
+      editingProductId = id;
+      document.getElementById("productFormTitle").textContent = "Edit Product";
+      document.querySelector("#productForm button[type='submit']").textContent = "Update Product";
+      
+      document.getElementById("pTitle").value = prod.title || "";
+      document.getElementById("pCategory").value = prod.category || "retail-essential";
+      document.getElementById("pDescription").value = prod.description || "";
+      document.getElementById("pImages").value = prod.images ? prod.images.join(", ") : "";
+      document.getElementById("pSpecs").value = JSON.stringify(prod.specs || {}, null, 2);
+      document.getElementById("pSizes").value = JSON.stringify(prod.sizes || {}, null, 2);
+      document.getElementById("pMoq").value = prod.moq || "";
+      
+      if (!document.getElementById("cancelProdEditBtn")) {
+        const cancelBtn = document.createElement("button");
+        cancelBtn.type = "button";
+        cancelBtn.id = "cancelProdEditBtn";
+        cancelBtn.className = "btn btn-outline";
+        cancelBtn.style.width = "100%";
+        cancelBtn.style.marginTop = "10px";
+        cancelBtn.textContent = "Cancel Edit";
+        cancelBtn.onclick = resetProductForm;
+        document.getElementById("productForm").appendChild(cancelBtn);
+      }
+      
+      // Scroll to form
+      document.getElementById("productForm").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function resetProductForm() {
+      editingProductId = null;
+      document.getElementById("productForm").reset();
+      document.getElementById("productFormTitle").textContent = "Add New Product";
+      document.querySelector("#productForm button[type='submit']").textContent = "Upload Product";
+      const cancelBtn = document.getElementById("cancelProdEditBtn");
+      if (cancelBtn) cancelBtn.remove();
+    }
+
+    // Edit Partner Setup
+    function startEditPartner(id) {
+      const part = dbData.partners.find(p => p.id === id);
+      if (!part) return;
+      
+      editingPartnerId = id;
+      document.getElementById("partnerFormTitle").textContent = "Edit Partner";
+      document.querySelector("#partnerForm button[type='submit']").textContent = "Update Partner";
+      
+      document.getElementById("partName").value = part.name || "";
+      document.getElementById("partLogo").value = part.logoUrl || "";
+      
+      if (!document.getElementById("cancelPartEditBtn")) {
+        const cancelBtn = document.createElement("button");
+        cancelBtn.type = "button";
+        cancelBtn.id = "cancelPartEditBtn";
+        cancelBtn.className = "btn btn-outline";
+        cancelBtn.style.width = "100%";
+        cancelBtn.style.marginTop = "10px";
+        cancelBtn.textContent = "Cancel Edit";
+        cancelBtn.onclick = resetPartnerForm;
+        document.getElementById("partnerForm").appendChild(cancelBtn);
+      }
+      
+      // Scroll to form
+      document.getElementById("partnerForm").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function resetPartnerForm() {
+      editingPartnerId = null;
+      document.getElementById("partnerForm").reset();
+      document.getElementById("partnerFormTitle").textContent = "Add Partner Company";
+      document.querySelector("#partnerForm button[type='submit']").textContent = "Upload Partner";
+      const cancelBtn = document.getElementById("cancelPartEditBtn");
+      if (cancelBtn) cancelBtn.remove();
+    }
+
+    // Save Handlers
+    async function saveProduct() {
+      const passcode = sessionStorage.getItem("shree_admin_pass");
+      const title = document.getElementById("pTitle").value.trim();
+      const category = document.getElementById("pCategory").value;
+      const description = document.getElementById("pDescription").value.trim();
+      const imagesRaw = document.getElementById("pImages").value.trim();
+      const specsRaw = document.getElementById("pSpecs").value.trim();
+      const sizesRaw = document.getElementById("pSizes").value.trim();
+      const moq = document.getElementById("pMoq").value.trim();
+      
+      let specs = {};
+      let sizes = {};
+      
+      try { if (specsRaw) specs = JSON.parse(specsRaw); } catch(e) { alert("Invalid Specs JSON format!"); return; }
+      try { if (sizesRaw) sizes = JSON.parse(sizesRaw); } catch(e) { alert("Invalid Sizes JSON format!"); return; }
+      
+      const product = {
+        title,
+        category,
+        description,
+        images: imagesRaw.split(",").map(i => i.trim()),
+        specs,
+        sizes,
+        moq
+      };
+      
+      if (isLocalStorageMode) {
+        if (editingProductId) {
+          const idx = dbData.products.findIndex(p => p.id === editingProductId);
+          if (idx !== -1) {
+            product.id = editingProductId;
+            dbData.products[idx] = product;
+            showToast("Product updated locally!");
+          }
+        } else {
+          product.id = "prod_" + new Date().getTime();
+          dbData.products.push(product);
+          showToast("Product saved locally!");
+        }
+        localStorage.setItem("shree_products", JSON.stringify(dbData.products));
+        resetProductForm();
+        renderProducts();
+        return;
+      }
+
+      const action = editingProductId ? "editProduct" : "addProduct";
+      showToast(editingProductId ? "Updating product..." : "Saving product...");
+      
+      try {
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action,
+            passcode,
+            id: editingProductId,
+            product
+          })
+        });
+        const res = await response.json();
+        
+        if (res.status === "success") {
+          showToast(editingProductId ? "Product updated!" : "Product saved!");
+          resetProductForm();
+          loadCMSData();
+        } else {
+          showToast("Error: " + res.message);
+        }
+      } catch (err) {
+        showToast("Error sending request.");
+        console.error(err);
+      }
+    }
+
+    async function savePartner() {
+      const passcode = sessionStorage.getItem("shree_admin_pass");
+      const name = document.getElementById("partName").value.trim();
+      const logoUrl = document.getElementById("partLogo").value.trim();
+      
+      const partner = { name, logoUrl };
+      
+      if (isLocalStorageMode) {
+        if (editingPartnerId) {
+          const idx = dbData.partners.findIndex(p => p.id === editingPartnerId);
+          if (idx !== -1) {
+            partner.id = editingPartnerId;
+            dbData.partners[idx] = partner;
+            showToast("Partner updated locally!");
+          }
+        } else {
+          partner.id = "part_" + new Date().getTime();
+          dbData.partners.push(partner);
+          showToast("Partner saved locally!");
+        }
+        localStorage.setItem("shree_partners", JSON.stringify(dbData.partners));
+        resetPartnerForm();
+        renderPartners();
+        return;
+      }
+
+      const action = editingPartnerId ? "editPartner" : "addPartner";
+      showToast(editingPartnerId ? "Updating partner..." : "Saving partner...");
+      
+      try {
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action,
+            passcode,
+            id: editingPartnerId,
+            partner
+          })
+        });
+        const res = await response.json();
+        
+        if (res.status === "success") {
+          showToast(editingPartnerId ? "Partner updated!" : "Partner saved!");
+          resetPartnerForm();
+          loadCMSData();
+        } else {
+          showToast("Error: " + res.message);
+        }
+      } catch(err) {
+        showToast("Error sending request.");
+      }
+    }
+
+    // Delete handler
+    async function deleteItem(action, id) {
+      if (!confirm("Are you sure you want to delete this item?")) return;
+      const passcode = sessionStorage.getItem("shree_admin_pass");
+      
+      if (isLocalStorageMode) {
+        if (action === "deleteProduct") {
+          dbData.products = dbData.products.filter(p => p.id !== id);
+          localStorage.setItem("shree_products", JSON.stringify(dbData.products));
+          showToast("Product deleted locally!");
+        } else {
+          dbData.partners = dbData.partners.filter(p => p.id !== id);
+          localStorage.setItem("shree_partners", JSON.stringify(dbData.partners));
+          showToast("Partner deleted locally!");
+        }
+        renderProducts();
+        renderPartners();
+        return;
+      }
+
+      showToast("Deleting...");
+      
+      try {
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action,
+            passcode,
+            id
+          })
+        });
+        const res = await response.json();
+        
+        if (res.status === "success") {
+          showToast("Item deleted!");
+          loadCMSData();
+        } else {
+          showToast("Error: " + res.message);
+        }
+      } catch (err) {
+        showToast("Error deleting item.");
+      }
+    }
+
+    // Toast helper
+    function showToast(msg) {
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.textContent = msg;
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

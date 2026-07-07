@@ -1,0 +1,7 @@
+# System-generated files and workspace logs
+.system_generated/
+.gemini/
+*.log
+node_modules/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | SHREE GLOBAL</title>
+  <meta name="description" content="SHREE GLOBAL imports sustainable products from India to Canada for retailers, distributors, and bulk buyers.">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<header class="navbar">
+  <div class="container nav-inner">
+    <a href="index.html" class="brand">
+      <img class="brand-logo" src="assets/images/logo.png" alt="SHREE GLOBAL logo">
+      <span class="brand-text">
+        <strong>SHREE GLOBAL</strong>
+        <span>Import Export</span>
+      </span>
+    </a>
+
+    <button class="menu-toggle" aria-label="Toggle navigation">☰</button>
+
+    <ul class="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="collections.html">Industries</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+
+    <a href="inquiry.html" class="btn btn-primary nav-cta magnetic">Inquiry</a>
+  </div>
+</header>
+
+
+<main>
+  <section class="page-hero">
+    <div class="container reveal">
+      <div class="eyebrow">Contact</div>
+      <h1>Talk to SHREE GLOBAL about sustainable sourcing, products, or your next bulk requirement.</h1>
+      <p>Use this page for general business contact. If you already know the product you need, the bulk inquiry page is the fastest path.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container contact-grid">
+      <aside class="contact-info reveal">
+        <h2>Business profile</h2>
+        <p><strong>SHREE GLOBAL</strong></p>
+        <p>Registered name: SHREE GLOBAL</p>
+        <p>Email: darshilshah7551@gmail.com</p>
+        <p>Based in Canada</p>
+        <p>Imports from India</p>
+        <br>
+        <a href="inquiry.html" class="btn btn-primary">Go to Bulk Inquiry</a>
+      </aside>
+
+      <form class="form reveal" data-google-sheet>
+        <div class="form-grid">
+          <div class="field"><label>Name</label><input type="text" name="name" required></div>
+          <div class="field"><label>Email</label><input type="email" name="email" required></div>
+          <div class="field"><label>Company</label><input type="text" name="company"></div>
+          <div class="field">
+            <label>Inquiry topic</label>
+            <select name="topic" required>
+              <option value="">Choose a topic</option>
+              <option>Product sourcing</option>
+              <option>Bulk pricing</option>
+              <option>Private label or customization</option>
+              <option>General business introduction</option>
+            </select>
+          </div>
+          <div class="field full"><label>Message</label><textarea name="message" required></textarea></div>
+        </div>
+        <button class="btn btn-primary magnetic" type="submit">Send Inquiry</button>
+        <p style="color:#5c666e;line-height:1.6;">This form can submit directly to Google Sheets and optionally trigger an email notification once your Apps Script URL is added.</p>
+      </form>
+    </div>
+  </section>
+
+  <section class="section section-light">
+    <div class="container">
+      <div class="section-title reveal">
+        <div><div class="eyebrow">What happens next</div><h2>Built to feel more like a business conversation.</h2></div>
+        <p>The page supports not only message submission, but the feeling that the buyer is entering a structured sourcing discussion with a company that understands product, timelines, and presentation.</p>
+      </div>
+      <div class="grid-3">
+        <article class="card card-light reveal"><h3>Best for general contact</h3><p>Use this page to introduce your business, ask about sourcing, or start a broader conversation.</p></article>
+        <article class="card card-light reveal"><h3>Best for product-specific needs</h3><p>If you already know the category, the bulk inquiry flow is the fastest path for quantity and customization details.</p></article>
+        <article class="card card-light reveal"><h3>Best for repeat buyers</h3><p>This structure helps reorders, custom development, and follow-up sourcing discussions feel easier over time.</p></article>
+      </div>
+    </div>
+  </section>
+</main>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="index.html" class="brand">
+          <img class="brand-logo" src="assets/images/logo.png" alt="SHREE GLOBAL logo">
+          <span class="brand-text">
+            <strong>SHREE GLOBAL</strong>
+            <span>Import Export</span>
+          </span>
+        </a>
+        <p>Canada-based sustainable import trading company sourcing reusable, eco-conscious, and natural-fiber products from India.</p>
+      </div>
+
+      <div>
+        <h3>Company</h3>
+        <a href="about.html">About Us</a>
+        <a href="products.html">Products</a>
+        <a href="collections.html">Industries</a>
+      </div>
+
+      <div>
+        <h3>Support</h3>
+        <a href="inquiry.html">Bulk Inquiry</a>
+        <a href="contact.html">Contact</a>
+        <a href="products.html">Product Catalog</a>
+      </div>
+
+      <div>
+        <h3>Contact</h3>
+        <p>Based in Canada</p>
+        <p>Imports from India</p>
+        <p>darshilshah7551@gmail.com</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 SHREE GLOBAL. All rights reserved.</p>
+      <p>Canada × India • Sustainable Product Focus</p>
+    </div>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="productModal" aria-hidden="true">
+  <div class="product-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" type="button" data-close-modal aria-label="Close product dialog">×</button>
+
+    <div class="modal-layout">
+      <div class="modal-gallery">
+        <div class="thumb-list" id="modalThumbs"></div>
+        <div class="main-product-image">
+          <img id="modalMainImage" src="" alt="">
+        </div>
+      </div>
+
+      <div class="modal-content">
+        <div class="eyebrow" id="modalCategory">Product category</div>
+        <h2 id="modalTitle">Product Name</h2>
+        <div class="rating">★★★★★ <span style="color:#5c666e;">Bulk buyer ready</span></div>
+        <p class="modal-description" id="modalDescription"></p>
+
+        <div class="modal-info-grid">
+          <div class="info-block">
+            <h3>Specifications</h3>
+            <ul class="spec-list" id="modalSpecs"></ul>
+          </div>
+
+          <div class="info-block">
+            <h3>Sizes Available</h3>
+            <ul class="size-list" id="modalSizes"></ul>
+          </div>
+        </div>
+
+        <div class="moq-box">
+          <div class="moq-icon">📦</div>
+          <div>
+            <span>Minimum Order Quantity</span>
+            <strong id="modalMoq">1000 Pcs</strong>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <a href="inquiry.html" class="btn btn-primary" id="modalInquiry">Inquire Now</a>
+          <a href="products.html" class="btn btn-dark">Download Catalog</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
