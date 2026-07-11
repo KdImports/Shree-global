@@ -688,7 +688,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const x = e.clientX - (rect.left + rect.width / 2);
       const y = e.clientY - (rect.top + rect.height / 2);
       
-      el.style.transform = `translate(${x * 0.22}px, ${y * 0.22}px)`;
+      const maxMove = 12; // Cap maximum movement to 12px
+      const dx = x * 0.08; // Reduce pull factor to 8%
+      const dy = y * 0.08;
+      
+      const clampedX = Math.max(-maxMove, Math.min(maxMove, dx));
+      const clampedY = Math.max(-maxMove, Math.min(maxMove, dy));
+      
+      el.style.transform = `translate(${clampedX}px, ${clampedY}px)`;
     });
     
     el.addEventListener("mouseleave", () => {
