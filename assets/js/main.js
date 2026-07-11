@@ -704,27 +704,60 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// FAQ Accordion Click Handler
+// Dynamic FAQ Accordion Renderer & Click Handler (Centralized Data)
+const faqData = [
+  {
+    q: "What is your standard Minimum Order Quantity (MOQ)?",
+    a: "Our standard MOQ is 1,000 to 2,000 pieces depending on the specific product category and customization requirements. For completely custom private label runs (custom sizes and structures), higher setup minimums may apply to optimize setup lines in India."
+  },
+  {
+    q: "Do you handle shipping, freight, and Canada customs clearance?",
+    a: "Yes, we coordinate the entire door-to-door logistics pipeline. We manage sea/air freight from Indian ports, handle Canadian customs clearance, pay duties, and deliver the bulk order directly to your warehouse depot or retail store locations anywhere in Canada."
+  },
+  {
+    q: "What is the average timeline from inquiry to final delivery?",
+    a: "The standard timeline is 6 to 10 weeks. This includes 2 weeks for sample approval and proofing, 3 to 4 weeks for factory manufacturing in India, and 4 weeks for ocean freight, customs clearance, and local Canadian logistics."
+  },
+  {
+    q: "Can we request physical samples before bulk production?",
+    a: "Absolutely. Once catalog specifications and target volumes are aligned, we develop physical pre-production samples with your custom branding/sizing and ship them to your Canadian office via DHL for final approval before mass manufacturing begins."
+  }
+];
+
 document.addEventListener("DOMContentLoaded", () => {
-  const faqQuestions = document.querySelectorAll(".faq-question");
-  
-  faqQuestions.forEach(question => {
-    question.addEventListener("click", () => {
-      const item = question.parentElement;
-      const isActive = item.classList.contains("active");
-      
-      // Close all open items
-      document.querySelectorAll(".faq-item").forEach(i => {
-        i.classList.remove("active");
-        i.querySelector(".faq-answer").style.maxHeight = null;
+  const faqContainer = document.querySelector(".faq-list");
+  if (faqContainer) {
+    // Populate the container with the centralized FAQ list
+    faqContainer.innerHTML = faqData.map(item => `
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          <span>${item.q}</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>${item.a}</p>
+        </div>
+      </div>
+    `).join('');
+    
+    // Bind click handlers to the newly generated questions
+    const faqQuestions = faqContainer.querySelectorAll(".faq-question");
+    faqQuestions.forEach(question => {
+      question.addEventListener("click", () => {
+        const item = question.parentElement;
+        const isActive = item.classList.contains("active");
+        
+        faqContainer.querySelectorAll(".faq-item").forEach(i => {
+          i.classList.remove("active");
+          i.querySelector(".faq-answer").style.maxHeight = null;
+        });
+        
+        if (!isActive) {
+          item.classList.add("active");
+          const answer = item.querySelector(".faq-answer");
+          answer.style.maxHeight = answer.scrollHeight + "px";
+        }
       });
-      
-      // Open clicked item if it wasn't active
-      if (!isActive) {
-        item.classList.add("active");
-        const answer = item.querySelector(".faq-answer");
-        answer.style.maxHeight = answer.scrollHeight + "px";
-      }
     });
-  });
+  }
 });
