@@ -703,3 +703,28 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+// FAQ Accordion Click Handler
+document.addEventListener("DOMContentLoaded", () => {
+  const faqQuestions = document.querySelectorAll(".faq-question");
+  
+  faqQuestions.forEach(question => {
+    question.addEventListener("click", () => {
+      const item = question.parentElement;
+      const isActive = item.classList.contains("active");
+      
+      // Close all open items
+      document.querySelectorAll(".faq-item").forEach(i => {
+        i.classList.remove("active");
+        i.querySelector(".faq-answer").style.maxHeight = null;
+      });
+      
+      // Open clicked item if it wasn't active
+      if (!isActive) {
+        item.classList.add("active");
+        const answer = item.querySelector(".faq-answer");
+        answer.style.maxHeight = answer.scrollHeight + "px";
+      }
+    });
+  });
+});

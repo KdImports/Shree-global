@@ -1708,3 +1708,108 @@ input:focus, textarea:focus, select:focus {
     linear-gradient(0deg, #071016 0%, transparent 20%);
 }
 
+/* =====================================================
+   SHREE GLOBAL - SYSTEM ENHANCEMENTS
+   ===================================================== */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 1. Page Fade-In and Spring Slide Transition */
+main {
+  animation: pageFadeIn 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 2. B2B FAQ Accordion Styles */
+.faq-section {
+  padding: 100px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.faq-list {
+  max-width: 860px;
+  margin: 50px auto 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.faq-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(10px);
+}
+
+.faq-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.faq-question {
+  width: 100%;
+  padding: 24px 30px;
+  background: none;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  color: var(--white);
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+  outline: none;
+}
+
+.faq-icon {
+  font-size: 24px;
+  font-weight: 300;
+  color: var(--gold);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-block;
+  line-height: 1;
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), padding 0.4s ease;
+  padding: 0 30px;
+  color: #aebac4;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* Active Accordion States */
+.faq-item.active {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.faq-item.active .faq-answer {
+  padding: 0 30px 24px 30px;
+  max-height: 250px; /* comfortable threshold */
+}
+
+.faq-item.active .faq-icon {
+  transform: rotate(45deg);
+  color: var(--red);
+}
+
